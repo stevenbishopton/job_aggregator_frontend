@@ -20,6 +20,64 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Docker Deployment
+
+### Quick Start
+
+To run the application using Docker:
+
+```bash
+# Build and run
+docker-compose up --build
+
+# Or run in background
+docker-compose up --build -d
+
+# Stop the container
+docker-compose down
+```
+
+### Manual Docker Commands
+
+```bash
+# Build the image
+docker build -t job-aggregator-frontend .
+
+# Run the container
+docker run -p 3000:3000 -e NEXT_PUBLIC_API_URL=http://your-backend-url job-aggregator-frontend
+
+# Run in background
+docker run -d -p 3000:3000 -e NEXT_PUBLIC_API_URL=http://your-backend-url job-aggregator-frontend
+```
+
+### Environment Variables
+
+Set the following environment variables:
+
+- `NEXT_PUBLIC_API_URL`: URL of your backend API (default: http://192.168.1.247:8000)
+
+Example:
+```bash
+export NEXT_PUBLIC_API_URL=http://your-backend-api.com
+docker-compose up --build
+```
+
+### Useful Commands
+
+```bash
+# Check container status
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+
+# Restart container
+docker-compose restart
+
+# Check resource usage
+docker stats
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

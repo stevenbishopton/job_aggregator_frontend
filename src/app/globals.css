@@ -1,8 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0f1123;
+  --foreground: #ededed;
+  --neon-blue: #00eaff;
+  --neon-pink: #ff00cc;
+  --neon-green: #39ff14;
+  --neon-purple: #a259ff;
+  --glass-bg: rgba(20, 24, 40, 0.7);
+  --glass-border: rgba(0, 234, 255, 0.3);
+}
+
+.neon-text {
+  color: var(--neon-blue);
+  text-shadow: 0 0 8px var(--neon-blue), 0 0 16px var(--neon-blue);
+}
+
+.neon-border {
+  border: 2px solid var(--neon-blue);
+  box-shadow: 0 0 12px var(--neon-blue), 0 0 24px var(--neon-blue);
+}
+
+.neon-glow {
+  box-shadow: 0 0 8px var(--neon-pink), 0 0 16px var(--neon-pink);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  border: 1.5px solid var(--glass-border);
+  backdrop-filter: blur(8px);
+}
+
+.neon-tag {
+  background: var(--neon-blue);
+  color: #0f1123;
+  box-shadow: 0 0 8px var(--neon-blue);
 }
 
 @theme inline {
