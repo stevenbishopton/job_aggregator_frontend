@@ -69,7 +69,7 @@ export default function Home() {
     fetchJobs();
   }, [search, apiUrl]);
 
-  // Date filter (frontend only until backend supports it)
+ 
   const filteredJobs = jobs.filter((job) => {
     if (!datePosted) return true;
     const jobDate = new Date(job.publication_date);
