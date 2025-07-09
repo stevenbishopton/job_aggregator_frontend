@@ -78,7 +78,6 @@ export default function Home() {
   }, [search, apiUrl]);
 
  
-  // Date filter (frontend only until backend supports it)
   const filteredJobs = jobs.filter((job) => {
     if (!datePosted) return true;
     const jobDate = new Date(job.publication_date);
@@ -111,7 +110,7 @@ export default function Home() {
         <div className="mb-8 p-6 bg-[#181a2b] border border-blue-800/60 rounded-xl text-blue-100 text-center shadow-lg backdrop-blur-md">
           <h2 className="text-2xl font-bold mb-2 text-blue-200">Job Aggregator</h2>
           <p className="text-base text-blue-300">
-            Discover remote jobs from multiple sources. Search, filter, and view details in a clean, modern interface. Powered by real-time data and a minimalist neon design.
+            Discover the latest remote jobs from around the world. Our job aggregator collects listings from various reputable sources, all up-to-date and all authentic!. 
           </p>
         </div>
         <div className="flex flex-col md:flex-row gap-4 mb-10 items-center justify-between">
@@ -143,50 +142,59 @@ export default function Home() {
               {filteredJobs.length === 0 ? (
                 <div className="col-span-full text-center text-blue-300 text-lg">
                   {jobs.length === 0 
-                    ? "No jobs found. Please check if the backend is running."
+                    ? "Give it a moment, we're fetching jobs for you..."
                     : search || datePosted 
                       ? `No jobs found matching your filters. Try adjusting your search or date range.`
                       : "No jobs available at the moment."
                   }
                 </div>
               ) : (
-                paginatedJobs.map((job) => (
-                  <div key={job.job_id} className="glass-card border border-blue-500/60 rounded-2xl p-6 flex flex-col min-h-[220px] max-h-[340px] shadow-lg bg-[#181a2b]/80 hover:border-blue-400 transition-all">
-                    <h2 className="text-lg font-bold mb-1 text-blue-200 line-clamp-2">
-                      <a href={job.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-300 hover:text-blue-400 transition-colors duration-200">{job.title}</a>
-                    </h2>
-                    <div className="text-blue-100 mb-1 font-semibold tracking-wide truncate">
-                      <span>{job.company_name}</span> &middot; <span className="text-blue-400">{job.location}</span>
+                paginatedJobs.map((job) => {
+                  const maxTags = 4;
+                  const tags = Array.isArray(job.tags)
+                    ? job.tags
+                    : job.tags && job.tags.split
+                      ? job.tags.split(",")
+                      : [];
+                  const visibleTags = tags.slice(0, maxTags);
+                  const extraTags = tags.length - maxTags;
+                  return (
+                    <div key={job.job_id} className="glass-card border border-blue-500/60 rounded-2xl p-6 flex flex-col min-h-[220px] max-h-[340px] shadow-lg bg-[#181a2b]/80 hover:border-blue-400 transition-all">
+                      <h2 className="text-lg font-bold mb-1 text-blue-200 line-clamp-2">
+                        <a href={job.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-300 hover:text-blue-400 transition-colors duration-200">{job.title}</a>
+                      </h2>
+                      <div className="text-blue-100 mb-1 font-semibold tracking-wide truncate">
+                        <span>{job.company_name}</span> &middot; <span className="text-blue-400">{job.location}</span>
+                      </div>
+                      <div className="text-blue-400 text-xs mb-2">Posted: <span className="text-blue-200">{formatDate(job.publication_date)}</span></div>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {visibleTags.map((tag, idx) => (
+                          <span key={tag + idx} className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700 truncate">{tag}</span>
+                        ))}
+                        {extraTags > 0 && (
+                          <span className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700 cursor-pointer" title="View all tags in details">
+                            +{extraTags} more
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-base font-semibold text-blue-300 truncate mb-2">{job.salary}</div>
+                      <div className="flex flex-row flex-wrap gap-2 mb-2">
+                        {job.job_type && (
+                          <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{job.job_type}</span>
+                        )}
+                        {job.source && (
+                          <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{job.source}</span>
+                        )}
+                      </div>
+                      <button
+                        className="mt-auto px-4 py-2 bg-blue-700 text-blue-100 rounded-lg hover:bg-blue-600 transition text-sm font-semibold border border-blue-800 shadow"
+                        onClick={() => setSelectedJob(job)}
+                      >
+                        View Details
+                      </button>
                     </div>
-                    <div className="text-blue-400 text-xs mb-2">Posted: <span className="text-blue-200">{formatDate(job.publication_date)}</span></div>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {job.tags && job.tags.split
-                        ? job.tags.split(",").map((tag, idx) => (
-                            <span key={tag + idx} className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700 truncate">{tag}</span>
-                          ))
-                        : Array.isArray(job.tags)
-                          ? job.tags.map((tag, idx) => (
-                              <span key={tag + idx} className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700 truncate">{tag}</span>
-                            ))
-                          : null}
-                    </div>
-                    <div className="text-base font-semibold text-blue-300 truncate mb-2">{job.salary}</div>
-                    <div className="flex flex-row flex-wrap gap-2 mb-2">
-                      {job.job_type && (
-                        <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{job.job_type}</span>
-                      )}
-                      {job.source && (
-                        <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{job.source}</span>
-                      )}
-                    </div>
-                    <button
-                      className="mt-auto px-4 py-2 bg-blue-700 text-blue-100 rounded-lg hover:bg-blue-600 transition text-sm font-semibold border border-blue-800 shadow"
-                      onClick={() => setSelectedJob(job)}
-                    >
-                      View Details
-                    </button>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
             {/* Modal for job details */}
@@ -254,6 +262,19 @@ export default function Home() {
           </>
         )}
       </div>
+      {/* Footer */}
+      <footer className="mt-16 py-6 bg-[#181a2b] border-t border-blue-800/60 text-center text-blue-200 text-sm shadow-inner">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+          <span>
+            <span className="font-semibold">Email:</span> <a href="mailto:kelechibishopton11@gmail.com" className="underline hover:text-blue-400">kelechibishopton11@gmail.com</a>
+          </span>
+          <span className="hidden md:inline">|</span>
+          <span>
+            <span className="font-semibold">Phone:</span> <a href="tel:+23408083685286" className="underline hover:text-blue-400">+23408083685286</a>
+          </span>
+        </div>
+        <div className="mt-2 text-blue-400">&copy; {new Date().getFullYear()} Job Aggregator</div>
+      </footer>
     </div>
   );
 }
