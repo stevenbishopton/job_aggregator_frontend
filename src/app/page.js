@@ -37,6 +37,7 @@ export default function Home() {
   const contactRef = useRef(null);
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 15;
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -105,7 +106,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#10121a] to-[#181a2b] p-6">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-5xl mx-auto px-2">
         {/* Project Description Section */}
         <div className="mb-8 p-4 bg-blue-900/30 rounded-lg text-blue-100 text-center shadow">
           <h2 className="text-xl font-bold mb-2">About This Project</h2>
@@ -157,7 +158,7 @@ export default function Home() {
           <div className="text-center text-red-400 text-lg">{error}</div>
         ) : (
           <>
-            <div className="grid gap-y-8 gap-x-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
               {filteredJobs.length === 0 ? (
                 <div className="col-span-full text-center text-blue-300 text-lg">
                   {jobs.length === 0 
@@ -169,42 +170,85 @@ export default function Home() {
                 </div>
               ) : (
                 paginatedJobs.map((job) => (
-                  <div key={job.job_id} className="glass-card border border-blue-900 rounded-xl p-8 flex flex-col h-96 shadow-md transition hover:border-blue-400 bg-[#161926]/80">
-                    <div className="flex-1 flex flex-col overflow-y-auto">
-                      <h2 className="text-xl font-semibold mb-2 text-blue-200 line-clamp-2">
-                        <a href={job.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-300 hover:text-blue-400 transition-colors duration-200">{job.title}</a>
-                      </h2>
-                      <div className="text-blue-100 mb-2 font-semibold tracking-wide truncate">
-                        <span>{job.company_name}</span> &middot; <span className="text-blue-300">{job.location}</span>
-                      </div>
-                      <div className="text-blue-400 text-sm mb-3">Posted: <span className="text-blue-200">{formatDate(job.publication_date)}</span></div>
-                      <div className="flex flex-wrap gap-3 mb-3">
-                        {job.tags && job.tags.split
-                          ? job.tags.split(",").map((tag, idx) => (
-                              <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-4 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800">{tag}</span>
-                            ))
-                          : Array.isArray(job.tags)
-                            ? job.tags.map((tag, idx) => (
-                                <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-4 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800">{tag}</span>
-                              ))
-                            : null}
-                      </div>
-                      <div className="mt-auto">
-                        <div className="text-base font-semibold text-blue-300 truncate">{job.salary}</div>
-                        <div className="flex flex-col items-end gap-3 min-w-[120px] mt-2">
-                          {job.job_type && (
-                            <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{job.job_type}</span>
-                          )}
-                          {job.source && (
-                            <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{job.source}</span>
-                          )}
-                        </div>
-                      </div>
+                  <div key={job.job_id} className="glass-card border border-blue-900 rounded-xl p-8 flex flex-col min-h-[220px] max-h-[340px] shadow-md transition hover:border-blue-400 bg-[#161926]/80">
+                    <h2 className="text-xl font-semibold mb-2 text-blue-200 line-clamp-2">
+                      <a href={job.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-300 hover:text-blue-400 transition-colors duration-200">{job.title}</a>
+                    </h2>
+                    <div className="text-blue-100 mb-2 font-semibold tracking-wide truncate">
+                      <span>{job.company_name}</span> &middot; <span className="text-blue-300">{job.location}</span>
                     </div>
+                    <div className="text-blue-400 text-sm mb-3">Posted: <span className="text-blue-200">{formatDate(job.publication_date)}</span></div>
+                    <div className="flex flex-wrap gap-3 mb-3">
+                      {job.tags && job.tags.split
+                        ? job.tags.split(",").map((tag, idx) => (
+                            <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-4 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800 truncate">{tag}</span>
+                          ))
+                        : Array.isArray(job.tags)
+                          ? job.tags.map((tag, idx) => (
+                              <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-4 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800 truncate">{tag}</span>
+                            ))
+                          : null}
+                    </div>
+                    <div className="text-base font-semibold text-blue-300 truncate">{job.salary}</div>
+                    <div className="flex flex-col items-end gap-3 min-w-[120px] mt-2">
+                      {job.job_type && (
+                        <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{job.job_type}</span>
+                      )}
+                      {job.source && (
+                        <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{job.source}</span>
+                      )}
+                    </div>
+                    <button
+                      className="mt-4 px-4 py-2 bg-blue-800 text-blue-100 rounded hover:bg-blue-700 transition text-sm font-semibold"
+                      onClick={() => setSelectedJob(job)}
+                    >
+                      View Details
+                    </button>
                   </div>
                 ))
               )}
             </div>
+            {/* Modal for job details */}
+            {selectedJob && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={() => setSelectedJob(null)}>
+                <div className="bg-[#181a2b] border border-blue-900 rounded-xl shadow-lg max-w-lg w-full p-8 relative text-blue-100" onClick={e => e.stopPropagation()}>
+                  <button
+                    className="absolute top-3 right-3 text-blue-400 hover:text-blue-200 text-2xl font-bold"
+                    onClick={() => setSelectedJob(null)}
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                  <h2 className="text-2xl font-bold mb-2 text-blue-200">{selectedJob.title}</h2>
+                  <div className="mb-2 text-blue-300 font-semibold">{selectedJob.company_name} &middot; <span className="text-blue-400">{selectedJob.location}</span></div>
+                  <div className="mb-2 text-blue-400 text-sm">Posted: <span className="text-blue-200">{formatDate(selectedJob.publication_date)}</span></div>
+                  <div className="mb-4">
+                    <a href={selectedJob.url} target="_blank" rel="noopener noreferrer" className="underline text-blue-400 hover:text-blue-200">View Original Posting</a>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {selectedJob.tags && selectedJob.tags.split
+                      ? selectedJob.tags.split(",").map((tag, idx) => (
+                          <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800">{tag}</span>
+                        ))
+                      : Array.isArray(selectedJob.tags)
+                        ? selectedJob.tags.map((tag, idx) => (
+                            <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800">{tag}</span>
+                          ))
+                        : null}
+                  </div>
+                  <div className="mb-4 text-base font-semibold text-blue-300">{selectedJob.salary}</div>
+                  <div className="flex gap-3 mb-4">
+                    {selectedJob.job_type && (
+                      <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{selectedJob.job_type}</span>
+                    )}
+                    {selectedJob.source && (
+                      <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{selectedJob.source}</span>
+                    )}
+                  </div>
+                  {/* Add more details here if available */}
+                </div>
+              </div>
+            )}
             {/* Pagination Controls */}
             {filteredJobs.length > jobsPerPage && (
               <div className="flex justify-center mt-8 gap-4">
