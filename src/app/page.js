@@ -31,7 +31,7 @@ export default function Home() {
   const [showContact, setShowContact] = useState(false);
   const contactRef = useRef(null);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "/api";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     function handleClickOutside(event) {
