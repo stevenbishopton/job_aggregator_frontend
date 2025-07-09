@@ -157,7 +157,7 @@ export default function Home() {
           <div className="text-center text-red-400 text-lg">{error}</div>
         ) : (
           <>
-            <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-y-8 gap-x-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
               {filteredJobs.length === 0 ? (
                 <div className="col-span-full text-center text-blue-300 text-lg">
                   {jobs.length === 0 
@@ -169,12 +169,12 @@ export default function Home() {
                 </div>
               ) : (
                 paginatedJobs.map((job) => (
-                  <div key={job.job_id} className="glass-card border border-blue-900 rounded-xl p-8 flex flex-col sm:flex-row gap-8 items-start shadow-md transition hover:border-blue-400 bg-[#161926]/80">
-                    <div className="flex-1">
-                      <h2 className="text-xl font-semibold mb-2 text-blue-200">
+                  <div key={job.job_id} className="glass-card border border-blue-900 rounded-xl p-8 flex flex-col h-full min-h-[340px] shadow-md transition hover:border-blue-400 bg-[#161926]/80">
+                    <div className="flex-1 flex flex-col">
+                      <h2 className="text-xl font-semibold mb-2 text-blue-200 line-clamp-2">
                         <a href={job.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-300 hover:text-blue-400 transition-colors duration-200">{job.title}</a>
                       </h2>
-                      <div className="text-blue-100 mb-2 font-semibold tracking-wide">
+                      <div className="text-blue-100 mb-2 font-semibold tracking-wide truncate">
                         <span>{job.company_name}</span> &middot; <span className="text-blue-300">{job.location}</span>
                       </div>
                       <div className="text-blue-400 text-sm mb-3">Posted: <span className="text-blue-200">{formatDate(job.publication_date)}</span></div>
@@ -189,15 +189,17 @@ export default function Home() {
                               ))
                             : null}
                       </div>
-                      <div className="text-base font-semibold text-blue-300">{job.salary}</div>
-                    </div>
-                    <div className="flex flex-col items-end gap-3 min-w-[120px]">
-                      {job.job_type && (
-                        <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{job.job_type}</span>
-                      )}
-                      {job.source && (
-                        <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{job.source}</span>
-                      )}
+                      <div className="mt-auto">
+                        <div className="text-base font-semibold text-blue-300 truncate">{job.salary}</div>
+                        <div className="flex flex-col items-end gap-3 min-w-[120px] mt-2">
+                          {job.job_type && (
+                            <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{job.job_type}</span>
+                          )}
+                          {job.source && (
+                            <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{job.source}</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))
