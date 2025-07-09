@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 
+// Function to format the date in YYYY-MM-DD format
 function formatDate(dateStr) {
   const date = new Date(dateStr);
   const year = date.getUTCFullYear();
@@ -10,11 +11,15 @@ function formatDate(dateStr) {
   return `${year}-${month}-${day}`;
 }
 
+// Function to get the date after a certain number of days ago
+
 function getDateAfter(daysAgo) {
   const date = new Date();
   date.setUTCDate(date.getUTCDate() - daysAgo);
   return date;
 }
+
+// Function to build the query string for the API request
 
 function buildQuery({ search }) {
   const params = [];
