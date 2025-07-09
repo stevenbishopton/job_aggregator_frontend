@@ -169,8 +169,8 @@ export default function Home() {
                 </div>
               ) : (
                 paginatedJobs.map((job) => (
-                  <div key={job.job_id} className="glass-card border border-blue-900 rounded-xl p-8 flex flex-col h-full min-h-[340px] shadow-md transition hover:border-blue-400 bg-[#161926]/80">
-                    <div className="flex-1 flex flex-col">
+                  <div key={job.job_id} className="glass-card border border-blue-900 rounded-xl p-8 flex flex-col h-96 shadow-md transition hover:border-blue-400 bg-[#161926]/80">
+                    <div className="flex-1 flex flex-col overflow-y-auto">
                       <h2 className="text-xl font-semibold mb-2 text-blue-200 line-clamp-2">
                         <a href={job.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-300 hover:text-blue-400 transition-colors duration-200">{job.title}</a>
                       </h2>
