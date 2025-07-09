@@ -105,46 +105,27 @@ export default function Home() {
   }, [search, datePosted]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#10121a] to-[#181a2b] p-6">
-      <div className="max-w-5xl mx-auto px-2">
+    <div className="min-h-screen bg-gradient-to-br from-[#10121a] to-[#181a2b] p-4">
+      <div className="max-w-4xl mx-auto">
         {/* Project Description Section */}
-        <div className="mb-8 p-4 bg-blue-900/30 rounded-lg text-blue-100 text-center shadow">
-          <h2 className="text-xl font-bold mb-2">About This Project</h2>
-          <p>
-            This Job Aggregator collects remote job listings from multiple sources and lets you search, filter by date, and view job details. Use the search bar to find jobs by keyword, company, or tag. The data is always up-to-date and the sources are authentic!
+        <div className="mb-8 p-6 bg-[#181a2b] border border-blue-800/60 rounded-xl text-blue-100 text-center shadow-lg backdrop-blur-md">
+          <h2 className="text-2xl font-bold mb-2 text-blue-200">Job Aggregator</h2>
+          <p className="text-base text-blue-300">
+            Discover remote jobs from multiple sources. Search, filter, and view details in a clean, modern interface. Powered by real-time data and a minimalist neon design.
           </p>
         </div>
-        <div className="flex justify-end mb-8 relative" ref={contactRef}>
-          <button
-            onClick={() => setShowContact((v) => !v)}
-            className="bg-blue-900 text-blue-100 px-5 py-2 rounded-lg font-semibold shadow hover:bg-blue-800 transition border border-blue-800 focus:outline-none"
-          >
-            Contact Me
-          </button>
-          {showContact && (
-            <div className="absolute right-0 mt-2 w-64 bg-[#181a2b] border border-blue-900 rounded-lg shadow-lg p-4 z-10 text-sm text-blue-200">
-              <div className="mb-2">
-                <span className="font-semibold">Email:</span> <a href="mailto:your@email.com" className="underline hover:text-blue-400">kelechibishopton11@gmail.com</a>
-              </div>
-              <div>
-                <span className="font-semibold">Phone:</span> <a href="tel:+1234567890" className="underline hover:text-blue-400">+23408083685286</a>
-              </div>
-            </div>
-          )}
-        </div>
-        <h1 className="text-3xl font-bold mb-10 text-center text-blue-200 tracking-widest">Job Aggregator</h1>
-        <div className="flex flex-col sm:flex-row gap-6 mb-14 flex-wrap">
+        <div className="flex flex-col md:flex-row gap-4 mb-10 items-center justify-between">
           <input
             type="text"
             placeholder="Search jobs, companies, tags..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 px-4 py-2 rounded bg-[#181a2b] text-white border border-blue-900 focus:border-blue-400 transition placeholder:text-blue-200 focus:outline-none"
+            className="flex-1 px-4 py-2 rounded-lg bg-[#161926] text-blue-100 border border-blue-800 focus:border-blue-400 transition placeholder:text-blue-400 focus:outline-none shadow"
           />
           <select
             value={datePosted}
             onChange={(e) => setDatePosted(e.target.value)}
-            className="w-48 px-4 py-2 rounded bg-[#181a2b] text-white border border-blue-900 focus:border-blue-400 transition focus:outline-none"
+            className="w-48 px-4 py-2 rounded-lg bg-[#161926] text-blue-100 border border-blue-800 focus:border-blue-400 transition focus:outline-none shadow"
           >
             <option value="">Any time</option>
             <option value="24h">Last 24h</option>
@@ -158,7 +139,7 @@ export default function Home() {
           <div className="text-center text-red-400 text-lg">{error}</div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {filteredJobs.length === 0 ? (
                 <div className="col-span-full text-center text-blue-300 text-lg">
                   {jobs.length === 0 
@@ -170,27 +151,27 @@ export default function Home() {
                 </div>
               ) : (
                 paginatedJobs.map((job) => (
-                  <div key={job.job_id} className="glass-card border border-blue-900 rounded-xl p-8 flex flex-col min-h-[220px] max-h-[340px] shadow-md transition hover:border-blue-400 bg-[#161926]/80">
-                    <h2 className="text-xl font-semibold mb-2 text-blue-200 line-clamp-2">
+                  <div key={job.job_id} className="glass-card border border-blue-500/60 rounded-2xl p-6 flex flex-col min-h-[220px] max-h-[340px] shadow-lg bg-[#181a2b]/80 hover:border-blue-400 transition-all">
+                    <h2 className="text-lg font-bold mb-1 text-blue-200 line-clamp-2">
                       <a href={job.url} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-300 hover:text-blue-400 transition-colors duration-200">{job.title}</a>
                     </h2>
-                    <div className="text-blue-100 mb-2 font-semibold tracking-wide truncate">
-                      <span>{job.company_name}</span> &middot; <span className="text-blue-300">{job.location}</span>
+                    <div className="text-blue-100 mb-1 font-semibold tracking-wide truncate">
+                      <span>{job.company_name}</span> &middot; <span className="text-blue-400">{job.location}</span>
                     </div>
-                    <div className="text-blue-400 text-sm mb-3">Posted: <span className="text-blue-200">{formatDate(job.publication_date)}</span></div>
-                    <div className="flex flex-wrap gap-3 mb-3">
+                    <div className="text-blue-400 text-xs mb-2">Posted: <span className="text-blue-200">{formatDate(job.publication_date)}</span></div>
+                    <div className="flex flex-wrap gap-2 mb-2">
                       {job.tags && job.tags.split
                         ? job.tags.split(",").map((tag, idx) => (
-                            <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-4 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800 truncate">{tag}</span>
+                            <span key={tag + idx} className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700 truncate">{tag}</span>
                           ))
                         : Array.isArray(job.tags)
                           ? job.tags.map((tag, idx) => (
-                              <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-4 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800 truncate">{tag}</span>
+                              <span key={tag + idx} className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700 truncate">{tag}</span>
                             ))
                           : null}
                     </div>
-                    <div className="text-base font-semibold text-blue-300 truncate">{job.salary}</div>
-                    <div className="flex flex-col items-end gap-3 min-w-[120px] mt-2">
+                    <div className="text-base font-semibold text-blue-300 truncate mb-2">{job.salary}</div>
+                    <div className="flex flex-row flex-wrap gap-2 mb-2">
                       {job.job_type && (
                         <span className="bg-[#1a1a2e] text-blue-200 px-3 py-1 rounded text-xs font-bold border border-blue-800">{job.job_type}</span>
                       )}
@@ -199,7 +180,7 @@ export default function Home() {
                       )}
                     </div>
                     <button
-                      className="mt-4 px-4 py-2 bg-blue-800 text-blue-100 rounded hover:bg-blue-700 transition text-sm font-semibold"
+                      className="mt-auto px-4 py-2 bg-blue-700 text-blue-100 rounded-lg hover:bg-blue-600 transition text-sm font-semibold border border-blue-800 shadow"
                       onClick={() => setSelectedJob(job)}
                     >
                       View Details
@@ -210,8 +191,8 @@ export default function Home() {
             </div>
             {/* Modal for job details */}
             {selectedJob && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={() => setSelectedJob(null)}>
-                <div className="bg-[#181a2b] border border-blue-900 rounded-xl shadow-lg max-w-lg w-full p-8 relative text-blue-100" onClick={e => e.stopPropagation()}>
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={() => setSelectedJob(null)}>
+                <div className="bg-[#181a2b] border border-blue-700 rounded-2xl shadow-2xl max-w-xl w-full p-8 relative text-blue-100 backdrop-blur-md" onClick={e => e.stopPropagation()}>
                   <button
                     className="absolute top-3 right-3 text-blue-400 hover:text-blue-200 text-2xl font-bold"
                     onClick={() => setSelectedJob(null)}
@@ -228,11 +209,11 @@ export default function Home() {
                   <div className="flex flex-wrap gap-2 mb-4">
                     {selectedJob.tags && selectedJob.tags.split
                       ? selectedJob.tags.split(",").map((tag, idx) => (
-                          <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800">{tag}</span>
+                          <span key={tag + idx} className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700">{tag}</span>
                         ))
                       : Array.isArray(selectedJob.tags)
                         ? selectedJob.tags.map((tag, idx) => (
-                            <span key={tag + idx} className="bg-blue-900/40 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-800">{tag}</span>
+                            <span key={tag + idx} className="bg-blue-900/60 text-blue-200 px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider border border-blue-700">{tag}</span>
                           ))
                         : null}
                   </div>
@@ -245,17 +226,16 @@ export default function Home() {
                       <span className="bg-[#181a2b] text-blue-400 px-3 py-1 rounded text-xs font-bold border border-blue-900">{selectedJob.source}</span>
                     )}
                   </div>
-                  {/* Add more details here if available */}
                 </div>
               </div>
             )}
             {/* Pagination Controls */}
             {filteredJobs.length > jobsPerPage && (
-              <div className="flex justify-center mt-8 gap-4">
+              <div className="flex justify-center mt-10 gap-4">
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 bg-blue-900 text-blue-100 rounded disabled:opacity-50"
+                  className="px-4 py-2 bg-blue-900 text-blue-100 rounded-lg disabled:opacity-50 border border-blue-800 shadow"
                 >
                   Previous
                 </button>
@@ -265,7 +245,7 @@ export default function Home() {
                 <button
                   onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-blue-900 text-blue-100 rounded disabled:opacity-50"
+                  className="px-4 py-2 bg-blue-900 text-blue-100 rounded-lg disabled:opacity-50 border border-blue-800 shadow"
                 >
                   Next
                 </button>
